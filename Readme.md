@@ -1,0 +1,1 @@
+Este projeto é dedicado ao aprendizado de conceitos da linguagem C#
