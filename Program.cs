@@ -1,6 +1,9 @@
 ﻿// Screen Sound
 string welcomeMessage = "\nBem vindo ao Screen Sound";
-List<string> bandList = new List<string>();
+// List<string> bandList = new List<string>();
+
+Dictionary<string, List<int>> registeredBands = new Dictionary<string, List<int>>();
+
 string[] OPTIONS = new string[4] {
     "criar uma banda",
     "mostrar uma banda",
@@ -8,7 +11,7 @@ string[] OPTIONS = new string[4] {
     "sair"
     };
 
-void ShowMenu()
+void ShowMainMenu()
 {
     Console.Clear();
     Console.WriteLine(@"Screen Sound");
@@ -26,7 +29,16 @@ void ActiveInteraction()
     int userNumber;
 
     Console.Write("Make your choice: ");
-    userNumber = int.Parse(Console.ReadLine()!);
+    try
+    {
+        userNumber = int.Parse(Console.ReadLine()!);
+    }
+    catch(System.Exception)
+    {
+        Console.Clear();
+        Console.WriteLine("O valor digitado não é válido");
+        return;
+    }
 
     switch (userNumber)
     {
@@ -34,10 +46,10 @@ void ActiveInteraction()
             RegisterBand();
             break;
         case 2:
-            ShowBands();
+            ShowRegisteredBands();
             break;
         case 3:
-            Console.WriteLine("Banda avaliada com sucesso!!!");
+            EvaluateBand();
             break;
         case 4:
             Console.WriteLine("Saindo do sistema");
@@ -46,32 +58,77 @@ void ActiveInteraction()
             Console.WriteLine("Valor inválido");
             break;
     }
+}
 
+void GenerateTitle(string title)
+{
+    Console.Clear();
+    int titleLetterCount = title.Length;
+    GenerateTitleSeparator(titleLetterCount);
+    Console.WriteLine(title);
+    GenerateTitleSeparator(titleLetterCount);
+    Console.Write("\n");
+}
+
+void GenerateTitleSeparator(int titleLetterCount)
+{
+    string separator = string.Empty.PadLeft(titleLetterCount, '*');
+    Console.WriteLine(separator);
 }
 
 void RegisterBand()
 {
-    Console.Clear();
-    Console.WriteLine("Registro de bandas\n");
+    GenerateTitle("Registro de bandas");
+
     Console.Write("Digite o nome da banda que deseja registrar: ");
     string bandName = Console.ReadLine()!;
-    bandList.Add(bandName);
+    registeredBands.Add(bandName, new List<int>());
     Console.Write($"A banda {bandName} foi registrada com sucesso!!!");
     Thread.Sleep(2000);
-    ShowMenu();
+    ShowMainMenu();
 }
 
-void ShowBands()
+void ShowRegisteredBands()
 {
-    Console.Clear();
-    Console.WriteLine("Listar bandas\n");
-    foreach (var band in bandList)
+    GenerateTitle("Listar bandas");
+    
+    foreach (var band in registeredBands.Keys)
     {
         Console.WriteLine(band);
     }
     Console.WriteLine("\nDigite uma tecla para voltar ao menu inicial");
     Console.ReadKey();
-    ShowMenu();
+    ShowMainMenu();
 }
 
-ShowMenu();
+void EvaluateBand()
+{
+    GenerateTitle("Avaliar banda");
+
+    Console.Write("Digite o nome da banda que deseja avaliar: ");
+    string bandName = Console.ReadLine()!;
+
+    if(registeredBands.ContainsKey(bandName))
+    {
+        Console.Write($"Digite a nota que quer atribuir para a banda {bandName}: ");
+        try
+        {
+            int bandNote = int.Parse(Console.ReadLine()!);
+            registeredBands[bandName].Add(bandNote);
+            Console.WriteLine("\nA nota foi atribuída com sucesso");
+        }
+        catch (System.Exception)
+        {
+            Console.WriteLine("O valor digitado não é válido");
+        }
+    } else
+    {
+        Console.WriteLine($"\nA banda {bandName} não foi encontrada!");
+    }
+
+    Console.WriteLine("Digite qualquer tecla para voltar ao menu principal");
+    Console.ReadKey();
+    ShowMainMenu();
+}
+
+ShowMainMenu();
