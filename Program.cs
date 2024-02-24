@@ -4,10 +4,11 @@ string welcomeMessage = "\nBem vindo ao Screen Sound";
 
 Dictionary<string, List<int>> registeredBands = new Dictionary<string, List<int>>();
 
-string[] OPTIONS = new string[4] {
+string[] OPTIONS = new string[5] {
     "criar uma banda",
     "mostrar uma banda",
     "avaliar uma banda",
+    "calcular a média de uma banda",
     "sair"
     };
 
@@ -52,6 +53,9 @@ void ActiveInteraction()
             EvaluateBand();
             break;
         case 4:
+            CalculateBandAverage();
+            break;
+        case 5:
             Console.WriteLine("Saindo do sistema");
             break;
         default:
@@ -127,6 +131,36 @@ void EvaluateBand()
     }
 
     Console.WriteLine("Digite qualquer tecla para voltar ao menu principal");
+    Console.ReadKey();
+    ShowMainMenu();
+}
+
+
+void CalculateBandAverage()
+{
+    GenerateTitle("Calcular média de uma banda");
+
+    Console.Write("Digite o nome da banda que você que calcular a média: ");
+    string bandName = Console.ReadLine()!;
+
+    if(registeredBands.ContainsKey(bandName))
+    {
+        try
+        {
+            double averageEvaluation = registeredBands[bandName].Average();
+            Console.WriteLine($"\nA média de avaliação da banda {bandName} é {averageEvaluation}");
+        }
+        catch(System.Exception)
+        {
+            Console.WriteLine($"\nA banda {bandName} ainda não possui avaliações!");
+        }
+    }
+    else
+    {
+        Console.WriteLine($"\nA banda {bandName} não está registrada");
+    }
+    
+    Console.WriteLine($"Digite qualquer tecla para voltar ao menu principal");
     Console.ReadKey();
     ShowMainMenu();
 }
