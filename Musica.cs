@@ -1,9 +1,10 @@
-class Music{
-    private readonly string name;
+class Song{
     private readonly string artist;
-    private readonly int duration;
     private bool available;
     public bool canSwitchAvailable = true;
+    
+    public string Name{ get; }
+    public int Duration{ get; }
 
     public bool Available
     {
@@ -26,19 +27,19 @@ class Music{
     }
 
 
-    public Music(string name, string artist, int duration, bool available)
+    public Song(string name, string artist, int duration, bool available)
     {
-        this.name = name;
+        Name = name;
+        Duration = duration;
         this.artist = artist;
-        this.duration = duration;
         Available = available;
     }
 
     public void ShowInformations()
     {
-        Console.WriteLine($"Name: {name}");
+        Console.WriteLine($"Name: {Name}");
         Console.WriteLine($"Artist: {artist}");
-        Console.WriteLine($"Duration: {duration}");
+        Console.WriteLine($"Duration: {Duration}");
         Console.WriteLine($"Available: {Available}");
     }
 }
